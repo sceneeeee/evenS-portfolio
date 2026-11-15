@@ -6,7 +6,7 @@ import path from 'node:path';
 const walk = async dir => (await Promise.all((await readdir(dir, { withFileTypes: true })).map(entry => entry.isDirectory() ? walk(path.join(dir, entry.name)) : [path.join(dir, entry.name)]))).flat();
 const files = await walk('dist');
 const pages = files.filter(file => file.endsWith('.html'));
-const routes = ['/', '/projects/', '/projects/etpnav-mid360/', '/404.html'];
+const routes = ['/', '/projects/', '/projects/etpnav-mid360/', '/projects/navida-habitat/', '/404.html'];
 const routeFile = route => path.join('dist', route.endsWith('.html') ? route : `${route}index.html`);
 const translated = route => route === '/404.html' ? '/zh/404/' : `/zh${route}`;
 const attrs = tag => Object.fromEntries([...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map(match => [match[1], match[2]]));
@@ -67,6 +67,15 @@ for (const file of pages) {
 
 const en = await readFile(routeFile('/projects/etpnav-mid360/'), 'utf8');
 const zh = await readFile(routeFile('/zh/projects/etpnav-mid360/'), 'utf8');
+const navEn = await readFile(routeFile('/projects/navida-habitat/'), 'utf8');
+const navZh = await readFile(routeFile('/zh/projects/navida-habitat/'), 'utf8');
+for (const id of ['NAV-01','NAV-02','NAV-03']) {
+  check(navEn.includes(`data-asset-id="${id}"`) && navZh.includes(`data-asset-id="${id}"`), `Missing bilingual NaVIDA media: ${id}`);
+}
+for (const value of ['21', '11', '8.620', 'Fake Policy']) {
+  check(navEn.includes(value) && navZh.includes(value), `Missing bilingual NaVIDA evidence value: ${value}`);
+}
+check(navEn.includes('engineering-demo.mp4') && navZh.includes('engineering-demo.mp4'), 'Missing bilingual NaVIDA demo video');
 const numericCells = html => [...html.matchAll(/<td>([\d.]+)<\/td>/g)].map(match => match[1]);
 check(numericCells(en).length === 36, 'Expected all 36 experimental metric values');
 check(JSON.stringify(numericCells(en)) === JSON.stringify(numericCells(zh)), 'Bilingual experimental values differ');
@@ -74,7 +83,7 @@ for (const id of ['overview','problem','contributions','architecture','implement
   check(en.includes(`id="${id}"`) && zh.includes(`id="${id}"`), `Missing parallel section: ${id}`);
 }
 for (const value of ['595', '411', '25', '159', '20', 'val_unseen']) check(en.includes(value) && zh.includes(value), `Missing audit value/context: ${value}`);
-for (const id of ['ETP-01', 'ETP-02', 'ETP-03']) check(en.includes(`data-asset-id="${id}"`) && zh.includes(`data-asset-id="${id}"`), `Missing parallel asset: ${id}`);
+for (const id of ['ETP-01', 'ETP-02', 'ETP-03', 'ETP-04']) check(en.includes(`data-asset-id="${id}"`) && zh.includes(`data-asset-id="${id}"`), `Missing parallel asset: ${id}`);
 for (const label of ['AUTHENTIC MEDIA PENDING','Reference baseline','Research in progress','Public documentation checked','No page at this address.']) check(!zh.includes(label), `Untranslated UI: ${label}`);
 check((await readFile('dist/zh/404.html', 'utf8')) === (await readFile('dist/zh/404/index.html', 'utf8')), 'Cloudflare Chinese 404 copy mismatch');
 check((await readFile('dist/robots.txt', 'utf8')).includes('Disallow: /'), 'robots development guard missing');

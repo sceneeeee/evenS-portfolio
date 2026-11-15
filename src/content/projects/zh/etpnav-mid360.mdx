@@ -5,20 +5,22 @@ title: ETPNav × MID360
 subtitle: 面向稀疏几何观测的导航接口适配。
 evidence: 航点多样性需要在 GraphMap 关联后得以保留，才能转化为有效的动作多样性。
 summary: 通过受控实验，研究稀疏 LiDAR 类观测、航点预测及其与冻结拓扑导航系统之间的相互作用。
-order: 1
+order: 3
 caseStudyReady: true
 status: research
-statusAsOf: '2026-11-03'
+lifecycle: discontinued
+validationLevel: controlled-experiment
+statusAsOf: '2026-11-16'
 role: 基线复现、接口适配与失败分析
 environment: Habitat / R2R-CE · 模拟 MID360 类稀疏观测
 tags: [视觉语言导航, 稀疏几何, GraphMap, 受控实验]
-repository: https://github.com/sceneeeee/ETPNav-MID360-showcase
+repository: https://github.com/sceneeeee/ETPNav-MID360
 contributions:
   - 复现 ETPNav / Habitat 基线，并加入诊断与观测工具。
   - 构建确定性的 MID360 类稀疏深度抽象，用于受控仿真实验。
   - 设计并评估显式几何航点方案，包括有界 NMS、MRU 与 G-Min。
   - 审计 GraphMap 关联后的候选多样性，并追踪冻结预测器的中间激活。
-  - 测试特征统计量对齐，记录负结果，并开始研究学习式特征适配。
+  - 测试特征统计量对齐，保留负结果；学习式特征适配仅形成未完成原型。
 contributionNote: ETPNav、GraphMap 及语言条件规划器属于上游工作。我的贡献是适配研究、诊断工具、受控对照与失败分析。
 collaboratorWork: []
 modules:
@@ -26,24 +28,24 @@ modules:
     status: validated
     context: 在固定开发对照集上开展的受控仿真实验。
   - name: 学习式特征适配
-    status: in-progress
-    context: 仅公开系统边界；当前训练细节与结果保持私有。
+    status: planned
+    context: 已停止推进，未完成正式训练、held-out 验证或泛化。
   - name: Isaac Sim 与实体 MID360 平台迁移
     status: planned
-    context: 不声称已完成真实机器人部署。
+    context: 项目已结项，不再推进 Isaac Sim 或 MID360 实机路径。
 sources:
-  - label: 公开展示仓库 README
-    url: https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/README.md
-    checkedAt: '2026-11-03'
+  - label: 项目主仓库 README
+    url: https://github.com/sceneeeee/ETPNav-MID360/blob/main/README.md
+    checkedAt: '2026-11-16'
     ref: main
-  - label: 详细研究概述
-    url: https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md
-    checkedAt: '2026-11-03'
+  - label: 研究结项报告
+    url: https://github.com/sceneeeee/ETPNav-MID360/blob/main/docs/project-closeout.md
+    checkedAt: '2026-11-16'
     ref: main
 ---
 import ArchitectureDiagram from '../../../components/ArchitectureDiagram.astro';
 import ResultsTable from '../../../components/ResultsTable.astro';
-import MediaPlaceholder from '../../../components/MediaPlaceholder.astro';
+import EvidenceMedia from '../../../components/EvidenceMedia.astro';
 import { etpnavAssets } from '../../../data/media';
 
 <section id="overview" className="case-section">
@@ -55,7 +57,7 @@ ETPNav 从全景 RGB-D 观测中预测航点，构建拓扑表示并执行自然
 
 实验有意限定在较窄的接口边界内：适配航点接口，并尽可能冻结 GraphMap 与下游规划器，以便分别分析传感器稀疏性、候选语义及图关联的影响。
 
-<div className="callout"><strong>当前范围</strong><p>已开展受控 Habitat 实验，学习式特征适配仍在研究中。原生 LiDAR 仿真与实体机器人迁移属于计划阶段。</p></div>
+<div className="callout"><strong>当前范围</strong><p>已完成受控 Habitat 实验并停止推进该研究线。Stage 5 学习式适配未完成，Isaac Sim 和实体机器人迁移均未实现。</p></div>
 </section>
 
 <section id="problem" className="case-section">
@@ -67,7 +69,7 @@ ETPNav 从全景 RGB-D 观测中预测航点，构建拓扑表示并执行自然
 
 核心工程问题是：能否在不重新设计整个导航栈的前提下，让原有导航先验继续适用于稀疏观测？受控消融每次检验一个假设，避免同时改动感知、规划与执行而难以解释结果。
 
-<MediaPlaceholder asset={etpnavAssets.observation} />
+<EvidenceMedia asset={etpnavAssets.proposals} />
 </section>
 
 <section id="contributions" className="case-section">
@@ -93,7 +95,7 @@ ETPNav 从全景 RGB-D 观测中预测航点，构建拓扑表示并执行自然
 
 <div className="two-up implementation-routes">
 <div><h3>显式几何 · 已测试</h3><p>12 视角深度 → 度量点云 → 确定性稀疏化 → 可通行性 / 几何分析 → 航点候选 → 冻结的图模块与规划器。</p></div>
-<div><h3>特征适配 · 进行中</h3><p>稀疏几何 → 冻结的深度表示 → 学习式适配 → 冻结的原始航点预测器 → GraphMap / 规划器。</p></div>
+<div><h3>特征适配 · 未完成原型</h3><p>稀疏几何 → 冻结的深度表示 → 学习式适配 → 冻结的原始航点预测器 → GraphMap / 规划器。</p></div>
 </div>
 </section>
 
@@ -116,7 +118,7 @@ GraphMap 可能将候选与已有幽灵节点合并，或将其吸收到已访�
 
 ### 先检验机制，再评价导航
 
-激活追踪与固定特征统计量对齐属于静态机制研究，其结论与导航评估分开报告。当前学习式适配的具体架构、训练方案、留出评估协议及未公开结果，均不在本公开案例的披露范围内。
+激活追踪与固定特征统计量对齐属于静态机制研究，其结论与导航评估分开报告。Stage 5 仅留下未完成原型；没有正式训练、留出集泛化验收或导航性能提升结论。
 </section>
 
 <section id="results" className="case-section case-section-wide">
@@ -127,6 +129,8 @@ GraphMap 可能将候选与已有幽灵节点合并，或将其吸收到已访�
 下表所有导航实验均使用同一组固定的 20 个 `val_unseen` 开发回合。这些数值用于快速受控比较，不能视为正式基准分数，也不能据此声称在独立留出数据上的泛化表现。
 
 <ResultsTable />
+
+<EvidenceMedia asset={etpnavAssets.frozen} />
 
 ### 哪些结果改变了下一步决策
 
@@ -145,13 +149,13 @@ GraphMap 可能将候选与已有幽灵节点合并，或将其吸收到已访�
 
 在一个被审计的配置中，595 个原始候选中有 411 个成为新幽灵节点，25 个与已有幽灵节点合并，159 个被已访问节点吸收。极短距离候选尤其容易被吸收。这是针对特定配置的审计，不能推断为普遍分布。
 
-<MediaPlaceholder asset={etpnavAssets.graph} />
+<EvidenceMedia asset={etpnavAssets.graph} />
 
 ### 完全塌缩发生在预测器下游
 
 稀疏输入经过冻结深度编码器后仍保留部分结构。激活追踪发现，完全塌缩发生在冻结航点预测器的后续部分，使航点 logits 实际上主要由偏置项驱动。证据指向接口 / 分布偏移问题，而不只是编码器没有形成任何有效表示。
 
-<MediaPlaceholder asset={etpnavAssets.activation} />
+<EvidenceMedia asset={etpnavAssets.activation} />
 
 ### 简单统计量对齐未能修复接口
 
@@ -166,10 +170,10 @@ GraphMap 可能将候选与已有幽灵节点合并，或将其吸收到已访�
 - 这 20 个开发回合规模较小，并且被反复用于方案比较。
 - 稀疏观测模型仅近似部分传感器特性，不是完整的原生 MID360 仿真。
 - 即使恢复静态激活，仍需要受控导航实验进行验证。
-- 当前学习式适配结果尚未公开。
-- Isaac Sim 原生 LiDAR、定位与实体 MID360 机器人执行均处于计划阶段。
+- Stage 5 学习式适配未完成正式训练或留出验证，不能声称已经恢复航点多样性。
+- Isaac Sim 原生 LiDAR、定位与实体 MID360 机器人执行均未实现，且该研究线已停止推进。
 
-计划中的迁移路径为：受控 Habitat 验证 → Isaac Sim 原生 LiDAR → MID360 与 IMU 定位 → 实体机器人集成。每个阶段都需要独立证据支持。
+历史设想的迁移路径并未继续执行；项目以已有受控实验和可核查负结果结项。
 </section>
 
 <section id="media" className="case-section">
@@ -177,9 +181,7 @@ GraphMap 可能将候选与已有幽灵节点合并，或将其吸收到已访�
 
 ## 为真实证据预留展示空间。
 
-上方三个标注占位区域分别用于真实观测对照、GraphMap 审计及预测器激活追踪。目前未提供演示视频，也未编造任何仿真截图或实验图表。
-
-后续素材将在核对项目来源、公开许可、图中标注及敏感信息后加入。上方结构图依据公开文档重绘，仅用于解释系统架构。
+已集成四张源自历史实验报告的可追溯 SVG：同一观测的 waypoint proposal、GraphMap 聚合审计、五个静态观测的激活率汇总，以及 Frozen-20 开发集对照。它们是历史数据后处理，不是新实验或模型导航视频。
 </section>
 
 <section id="repository" className="case-section">
@@ -187,9 +189,9 @@ GraphMap 可能将候选与已有幽灵节点合并，或将其吸收到已访�
 
 ## 公开范围与上游工作。
 
-[ETPNav-MID360 展示仓库](https://github.com/sceneeeee/ETPNav-MID360-showcase) 包含可公开的研究概述、分析材料及相关文档，与仍在进行研究的私有开发仓库相互独立。
+[ETPNav-MID360 主仓库](https://github.com/sceneeeee/ETPNav-MID360) 包含可公开的研究概述、分析材料及相关文档，与已结项的原始项目仓库相互独立。
 
-本页的实现描述与结果依据 [公开研究概述](https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md)，核对日期为 2026 年 11 月 3 日。网站制作过程中未重新运行这些实验。
+本页的实现描述与结果依据 [项目结项报告](https://github.com/sceneeeee/ETPNav-MID360/blob/main/docs/project-closeout.md)，核对日期为 2026 年 11 月 16 日。网站制作过程中未重新运行这些实验。
 
 上游工作：**ETPNav: Evolving Topological Planning for Vision-Language Navigation in Continuous Environments**，Dong An 等，IEEE TPAMI，2024。[原始仓库](https://github.com/MarSaKi/ETPNav) · [论文](https://arxiv.org/abs/2304.03047)。
 </section>

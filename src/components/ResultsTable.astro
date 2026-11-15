@@ -10,4 +10,4 @@ const t = dictionaries[getLocale(Astro.url.pathname)].results;
     <tbody>{etpnavResults.map((values, index) => <tr class:list={{ 'baseline-row': index === 0 }}><th scope="row">{t.methods[index]}{index === 0 && <span class="baseline-label">{t.baseline}</span>}</th>{values.map(value => <td>{value}</td>)}</tr>)}</tbody>
   </table>
 </div>
-<p class="table-note">{t.explanation}<a href="https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md">{t.source}</a>{t.afterSource}</p>
+<p class="table-note">{t.explanation}<a href="https://github.com/sceneeeee/ETPNav-MID360/blob/main/docs/project-closeout.md">{t.source}</a>{t.afterSource}</p>

@@ -2,13 +2,17 @@
 
 Static engineering portfolio built with Astro, strict TypeScript, Tailwind CSS (Vite integration), and MDX content collections. Cloudflare Pages is the intended host. No backend or runtime adapter is required.
 
-## Phase 1 scope
+## Phase 2 evidence integration (review branch)
 
-- Home, Projects index, and the full ETPNav × MID360 case study.
-- Shared responsive navigation/layout, typed project metadata, result table, architecture explanation, and reusable media placeholders.
-- Room-Sign and NaVIDA appear as evidence-scoped summaries. Their detail pages, About, CV, and Contact are reserved for Phase 3. There is no Experience page.
-- No images are fabricated. Three authentic ETPNav figures are pending; see [asset inventory](docs/assets-needed.md).
-- The website is deliberately non-indexable during development. Nothing has been deployed.
+The portfolio now distinguishes **lifecycle** (current research / completed engineering / discontinued research) from **validation level** (offline prototype / controlled development experiments / real simulator integration / simulation workspace).
+
+- **Room-Sign-Guided Navigation** is the only current research project. M3.2 recorded-video advice was tested; M3.3 live acceptance and real multi-door loop are pending.
+- **NaVIDA–Habitat** is a completed engineering integration, with a real Habitat + HTTP demonstration using a prominently labeled **Deterministic Fake Policy**. Its historical real NaVIDA 80-step grounded run failed.
+- **ETPNav–MID360** is discontinued, with four traceable historical experiment figures and no successful learned adapter, native MID360 simulation, or physical robot.
+- **ROS 2 FishBot** is a simulation-only secondary project.
+- English is default; equivalent Chinese URLs begin at `/zh/`.
+- Media and CSV/JSON evidence are copied locally from the public source repositories; see [the media inventory](docs/assets-needed.md).
+- About, CV, Contact, Cloudflare deployment and public search indexing are **not part of this PR**.
 
 ## Local development
 

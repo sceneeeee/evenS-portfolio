@@ -19,6 +19,8 @@ const projects = defineCollection({
     order: z.number().int(),
     caseStudyReady: z.boolean().default(false),
     status: z.enum(['research', 'modules', 'integration']),
+    lifecycle: z.enum(['active', 'completed', 'discontinued']),
+    validationLevel: z.enum(['offline-prototype', 'controlled-experiment', 'simulator-integration', 'simulation-workspace']),
     statusAsOf: z.string(),
     role: z.string(),
     environment: z.string(),

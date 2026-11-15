@@ -1,0 +1,26 @@
+{
+  "first_decision": {
+    "observation": "Habitat episode 53",
+    "dense_candidates": 4,
+    "sparse_zero_shot_candidates": 5,
+    "sparse_candidate_radius_m": 0.75
+  },
+  "graphmap": {
+    "raw_candidates": 595,
+    "new_ghosts": 411,
+    "ghost_merges": 25,
+    "visited_absorptions": 159,
+    "candidate_associated_actions": 436,
+    "actions_per_nonempty_decision": 3.664,
+    "efficiency_percent": 73.28
+  },
+  "activation_static5": {
+    "observations": 5,
+    "dense_classifier_active_observations": 5,
+    "sparse_classifier_active_observations": 0,
+    "aligned_classifier_active_observations": 0,
+    "mean_dense_encoder_activity_percent": 23.52
+  },
+  "frozen20_methods": 6,
+  "scope": "Post-processing of preserved historical evidence; no Habitat, checkpoint, or navigation experiment executed by this evidence-pack generation."
+}

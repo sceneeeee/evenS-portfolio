@@ -13,7 +13,7 @@ export async function localizedProjects(locale: Locale) {
     if (!other || other.data.caseStudyReady !== project.data.caseStudyReady) {
       throw new Error(`Missing or mismatched project translation: ${project.id}`);
     }
-    for (const field of ['status', 'statusAsOf', 'order', 'repository'] as const) {
+    for (const field of ['status', 'lifecycle', 'validationLevel', 'statusAsOf', 'order', 'repository'] as const) {
       if (other.data[field] !== project.data[field]) throw new Error(`Inconsistent bilingual ${field}: ${project.data.slug}`);
     }
     if (JSON.stringify(other.data.modules.map(module => module.status)) !== JSON.stringify(project.data.modules.map(module => module.status))) {

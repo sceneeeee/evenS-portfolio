@@ -1,0 +1,169 @@
+---
+locale: en
+slug: navida-habitat
+title: NaVIDA × Habitat
+subtitle: Model–Simulator Systems Integration
+evidence: A real Habitat + localhost HTTP deterministic-policy demonstration verified 21 actions, 21 requests, 11 fixed decisions, 0 collisions, and explicit STOP; it did not run NaVIDA inference.
+summary: An auditable integration of a stateful NaVIDA-compatible inference service, strict action parser, and Habitat evaluator, completed as software engineering rather than a successful VLN benchmark.
+order: 2
+caseStudyReady: true
+status: integration
+lifecycle: completed
+validationLevel: simulator-integration
+statusAsOf: '2026-11-16'
+role: Model-side runtime and HTTP integration; authored paired evaluator-side HTTP adapter and grounded demo
+ownershipSummary: 'Personal repository model service and PR #4/#5 evaluator adapters are account-attributed to evenS; broader SURF Habitat evaluator and NaVIDA model are third-party/team work.'
+environment: 'Real Habitat-Lab/Sim 0.3.3 + localhost HTTP; deterministic Fake Policy engineering showcase; historical RTX 4060 Ti 8GB 4-bit checkpoint smoke'
+tags: [Habitat, HTTP integration, Action parsing, Engineering demo]
+repository: https://github.com/sceneeeee/navida-habitat
+contributions:
+  - Built model-side mock and official-checkpoint runtime, RGB history, strict action parser, stateful HTTP episode and atomic-action queue interfaces.
+  - Authored the paired evaluator-side HTTP adapter and grounded single-episode demo in the SURF team repository via attributable PRs.
+  - Consolidated the demonstrable two-process integration and its deterministic real-Habitat validation with auditable logs and media.
+contributionNote: Authorship is supported by repository and PR metadata, not proof of exclusively manual implementation. NaVIDA model/weights and most of the Habitat evaluator were developed upstream/by the SURF team.
+collaboratorWork:
+  - RtimesC/habitat-lab team owns the broader simulator evaluator and underlying Habitat infrastructure.
+  - Original NaVIDA policy and checkpoint belong to their upstream authors.
+modules:
+  - name: Model-side serving, parser and history
+    status: validated
+    context: Original official-checkpoint smoke and HTTP protocol; not an aligned navigation benchmark.
+  - name: Real Habitat and HTTP engineering integration
+    status: validated
+    context: 21 fixed actions and 21 requests, 11 deterministic decisions, 0 collisions; explicitly Fake Policy.
+  - name: Historical goal-grounded NaVIDA run
+    status: validated
+    context: "Real checkpoint reached 80 steps but failed the goal: success=0, SPL=0, final distance about 8.620 m."
+  - name: Standard VLN benchmark or physical robot deployment
+    status: planned
+    context: Not completed; not part of the closed engineering deliverable.
+sources:
+  - label: Engineering demonstration
+    url: https://github.com/sceneeeee/navida-habitat/blob/main/docs/engineering-demo.md
+    checkedAt: '2026-11-16'
+    ref: main
+  - label: Engineering acceptance record
+    url: https://github.com/sceneeeee/navida-habitat/blob/main/docs/evaluator-migration-acceptance.md
+    checkedAt: '2026-11-16'
+    ref: main
+  - label: Contribution audit
+    url: https://github.com/sceneeeee/navida-habitat/blob/main/docs/contribution-audit.md
+    checkedAt: '2026-11-16'
+    ref: main
+---
+import EvidenceMedia from '../../../components/EvidenceMedia.astro';
+import { navidaAssets } from '../../../data/media';
+
+<section id="overview" className="case-section">
+<span className="eyebrow">01 / OVERVIEW</span>
+
+## Integrating model, protocol and simulator — not claiming navigation success.
+
+The completed engineering deliverable connects a model-side policy service and a separately owned Habitat evaluator. The showcased real Habitat execution uses a **Deterministic Fake Policy** to validate the HTTP/queue/environment interfaces; no NaVIDA checkpoint is loaded in this video.
+
+<div className="callout"><strong>Completion boundary</strong><p>Software integration is complete. No standard VLN benchmark result, learned navigation success or physical robot deployment is claimed.</p></div>
+
+<EvidenceMedia asset={navidaAssets.scene} />
+</section>
+
+<section id="problem" className="case-section">
+<span className="eyebrow">02 / PROBLEM & MOTIVATION</span>
+
+## Make model output executable, bounded and auditable.
+
+A vision-language policy emits action text, whereas Habitat advances using atomic simulator actions. Connecting these systems requires episode identity, RGB observations, step sequencing, strict parsing and traceable decisions—not simply a direct model call. The stateful interface separates a *policy decision* from the queued environment steps that realize that decision.
+</section>
+
+<section id="contributions" className="case-section">
+<span className="eyebrow">03 / MY CONTRIBUTIONS</span>
+
+## Model-side ownership, evaluator-side authored interfaces.
+
+- Implemented the model-side checkpoint runtime with local 4-bit inference, sampled RGB frame history, strict action-chunk parser and atomic queue.
+- Developed the stateful local HTTP service and explicit episode/step validation.
+- Authored the corresponding HTTP client adapter and grounded single-episode test in the separate SURF evaluator repository ([team PR #4](https://github.com/RtimesC/habitat-lab/pull/4) and [team PR #5](https://github.com/RtimesC/habitat-lab/pull/5)).
+- Consolidated a real-Habitat deterministic-policy engineering demonstration with action, pose, HTTP and media evidence.
+
+<div className="ownership-note"><strong>Attribution boundary</strong><p>Repository/PR history supports responsibility for the specified contributions, not a claim that every line was hand-written. The original NaVIDA model, checkpoint and broad Habitat evaluator framework belong to upstream researchers and SURF collaborators. See the <a href="https://github.com/sceneeeee/navida-habitat/blob/main/docs/contribution-audit.md">contribution audit</a>.</p></div>
+</section>
+
+<section id="architecture" className="case-section case-section-wide">
+<span className="eyebrow">04 / SYSTEM ARCHITECTURE</span>
+
+## HTTP decisions versus atomic simulator actions.
+
+The model-side process maintains a stateful episode and action queue. The evaluator sends current RGB, instruction and step identity, then consumes one bounded action per `env.step()`. In the fixed-action showcase a deterministic policy substitutes for inference; the transport and Habitat stepper remain real.
+
+<EvidenceMedia asset={navidaAssets.flow} />
+</section>
+
+<section id="implementation" className="case-section">
+<span className="eyebrow">05 / TECHNICAL IMPLEMENTATION</span>
+
+## Measured physical-action semantics in simulation.
+
+- Habitat 0.3.3 scene loading/reset and RGB rendering completed in `skokloster-castle`.
+- Forward action displacement was approximately **0.249999864 m**; single turns approximately **±15°** and consecutive left turns approximately **30°**; explicit STOP terminated the episode.
+- A normal Stage C case produced **4 HTTP requests / 4 real environment steps**.
+- An invalid-output case produced **3 requests / only 2 real steps**; invalid model output ended the run without a hidden replacement action.
+
+The original 4-bit checkpoint was also executed historically on an RTX 4060 Ti 8 GiB, but that separate run is **not** the policy shown in the engineering video.
+</section>
+
+<section id="results" className="case-section case-section-wide">
+<span className="eyebrow">06 / EXPERIMENTS & RESULTS</span>
+
+## The integration works; navigation success is not established.
+
+| Validation | Recorded evidence | Interpretation |
+|---|---|---|
+| Deterministic real-Habitat showcase | **21 actions**, **21 HTTP requests**, **11 fixed decisions** | Verified interface and fixed-action execution, not learned policy inference |
+| Collision/termination | **0 collisions**, explicit **STOP** | Specific scripted episode only; not safety or search success |
+| Video export | 640 × 480, 21 frames at 2 fps, 10.5 s | Playback rate is not measured control throughput |
+| Local tests | Model-side **98 passed / 1 skipped**; evaluator **56 passed** | Software checks; CI does not run the full simulator |
+| Historical real NaVIDA grounded episode | **80 steps**, success **0**, SPL **0**, final goal distance ~**8.620 m** | Model failed the task; a separate Oracle control succeeded |
+
+The early five-step real-checkpoint HTTP smoke was not aligned with the random PointNav goal. The later grounded 80-step run was instruction-linked and **failed**. These are historical experiments, not newly rerun evidence or official R2R/RxR results.
+</section>
+
+<section id="failure-analysis" className="case-section">
+<span className="eyebrow">07 / FAILURE ANALYSIS</span>
+
+## Separate protocol correctness from policy performance.
+
+The evaluator intentionally did **not** substitute `move_forward` or another fallback after invalid model text. An invalid-output path issued fewer real environment steps than HTTP requests. Likewise, a functioning inference service and a successful Oracle reference do not mean the NaVIDA policy navigated successfully; its historical grounded run stopped at the wrong location.
+</section>
+
+<section id="limitations" className="case-section">
+<span className="eyebrow">08 / LIMITATIONS</span>
+
+## An engineering integration, not a navigation benchmark.
+
+There is no reported standard VLN benchmark, multi-scene generalization study, real-robot deployment or production-hardened service. The deterministic-policy video uses fixed actions and does not follow the task goal. The Habitat scene and licensed assets are not redistributed as raw datasets.
+</section>
+
+<section id="media" className="case-section case-section-wide">
+<span className="eyebrow">09 / AUTHENTIC MEDIA</span>
+
+## Real Habitat + HTTP. Deterministic Fake Policy.
+
+<EvidenceMedia asset={navidaAssets.trajectory} />
+
+<figure className="media-figure evidence-video">
+  <video controls preload="none" playsInline poster="/media/projects/navida-habitat/habitat-scene.png" aria-label="Deterministic Fake Policy running in real Habitat through localhost HTTP">
+    <source src="/media/projects/navida-habitat/engineering-demo.mp4" type="video/mp4" />
+    Your browser does not support MP4 video.
+  </video>
+  <figcaption><strong>Deterministic Fake Policy / Real Habitat + HTTP.</strong> Fixed 21-action engineering demonstration; this video does not show NaVIDA model inference, task success, or autonomous navigation. <a href="https://github.com/sceneeeee/navida-habitat/blob/main/docs/engineering-demo.md">Verified source</a>.</figcaption>
+</figure>
+</section>
+
+<section id="repository" className="case-section">
+<span className="eyebrow">10 / REPOSITORY & ATTRIBUTION</span>
+
+## Auditable source and ownership.
+
+[Model-side repository and consolidated engineering demo](https://github.com/sceneeeee/navida-habitat) · [Project case study and historical model evidence](https://github.com/sceneeeee/navida-habitat/blob/main/docs/portfolio-case-study.md) · [Detailed engineering acceptance](https://github.com/sceneeeee/navida-habitat/blob/main/docs/evaluator-migration-acceptance.md) · [Contribution audit](https://github.com/sceneeeee/navida-habitat/blob/main/docs/contribution-audit.md).
+
+All media represent a specific recorded test. Real RGB screenshot and trajectory originate from Habitat; the HTTP flow is an explanatory design illustration. The current video is fixed-policy engineering validation, distinct from the historical failed real-checkpoint grounded experiment.
+</section>
