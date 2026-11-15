@@ -5,20 +5,22 @@ title: ETPNav × MID360
 subtitle: Adapting a navigation interface to sparse geometry.
 evidence: Waypoint diversity must survive GraphMap association to become useful action diversity.
 summary: Controlled studies of sparse LiDAR-style observations, waypoint prediction, and their interaction with a frozen topological navigation stack.
-order: 1
+order: 3
 caseStudyReady: true
 status: research
-statusAsOf: '2026-11-03'
+lifecycle: discontinued
+validationLevel: controlled-experiment
+statusAsOf: '2026-11-16'
 role: Baseline reproduction, interface adaptation & failure analysis
 environment: Habitat / R2R-CE · simulated MID360-like sparsity
 tags: [Vision-and-language navigation, Sparse geometry, GraphMap, Controlled experiments]
-repository: https://github.com/sceneeeee/ETPNav-MID360-showcase
+repository: https://github.com/sceneeeee/ETPNav-MID360
 contributions:
   - Reproduced and instrumented the ETPNav / Habitat baseline.
   - Built deterministic MID360-like sparse-depth abstractions for controlled simulation studies.
   - Designed and evaluated explicit-geometry waypoint variants, including bounded NMS, MRU and G-Min.
   - Audited proposal diversity after GraphMap association and traced frozen predictor activations.
-  - Tested feature-statistics alignment, preserved its negative result, and began learned feature adaptation.
+  - Tested feature-statistics alignment, preserved its negative result, and documented an unfinished learned-adapter prototype.
 contributionNote: ETPNav, GraphMap, and the language-conditioned planner are upstream work. My contribution is the adaptation study, instrumentation, controlled comparisons, and failure analysis.
 collaboratorWork: []
 modules:
@@ -26,24 +28,24 @@ modules:
     status: validated
     context: Controlled simulation experiments on a fixed development panel.
   - name: Learned feature adaptation
-    status: in-progress
-    context: Public system boundary only; current training details and results remain private.
+    status: planned
+    context: Discontinued before formal training, held-out validation or generalized adaptation.
   - name: Isaac Sim and physical MID360 transfer
     status: planned
-    context: No real-robot deployment is claimed.
+    context: Not implemented. The project is closed; no further Isaac Sim or MID360 hardware transfer is planned.
 sources:
-  - label: Public showcase README
-    url: https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/README.md
-    checkedAt: '2026-11-03'
+  - label: Project README
+    url: https://github.com/sceneeeee/ETPNav-MID360/blob/main/README.md
+    checkedAt: '2026-11-16'
     ref: main
-  - label: Detailed research overview
-    url: https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md
-    checkedAt: '2026-11-03'
+  - label: Project closeout report
+    url: https://github.com/sceneeeee/ETPNav-MID360/blob/main/docs/project-closeout.md
+    checkedAt: '2026-11-16'
     ref: main
 ---
 import ArchitectureDiagram from '../../../components/ArchitectureDiagram.astro';
 import ResultsTable from '../../../components/ResultsTable.astro';
-import MediaPlaceholder from '../../../components/MediaPlaceholder.astro';
+import EvidenceMedia from '../../../components/EvidenceMedia.astro';
 import { etpnavAssets } from '../../../data/media';
 
 <section id="overview" className="case-section">
@@ -55,7 +57,7 @@ ETPNav uses learned waypoints from panoramic RGB-D observations to build a topol
 
 The experimental boundary is deliberately narrow: adapt the waypoint interface while keeping GraphMap and the downstream planner frozen wherever possible. This makes sensor sparsity, proposal semantics, and graph interaction easier to investigate separately.
 
-<div className="callout"><strong>Current scope</strong><p>Controlled Habitat studies and ongoing feature adaptation. Native LiDAR simulation and physical robot transfer are planned stages.</p></div>
+<div className="callout"><strong>Current scope</strong><p>Controlled Habitat experiments are concluded. Stage 5 learned adaptation was not completed; no native Isaac LiDAR or physical MID360 deployment occurred.</p></div>
 </section>
 
 <section id="problem" className="case-section">
@@ -67,7 +69,7 @@ Replacing a learned RGB-D front-end with geometry-based waypoints changes more t
 
 The engineering question is whether the original navigation prior can remain useful under sparse observations without redesigning the whole stack. Controlled ablations test one hypothesis at a time rather than changing perception, planning, and execution together.
 
-<MediaPlaceholder asset={etpnavAssets.observation} />
+<EvidenceMedia asset={etpnavAssets.proposals} />
 </section>
 
 <section id="contributions" className="case-section">
@@ -93,7 +95,7 @@ The engineering question is whether the original navigation prior can remain use
 
 <div className="two-up implementation-routes">
 <div><h3>Explicit geometry · tested</h3><p>12-view depth → metric point cloud → deterministic sparsification → traversability / geometry → waypoint candidates → frozen graph and planner.</p></div>
-<div><h3>Feature adaptation · ongoing</h3><p>Sparse geometry → frozen depth representation → learned adaptation → frozen original waypoint predictor → GraphMap / planner.</p></div>
+<div><h3>Feature adaptation · unfinished prototype</h3><p>Sparse geometry → frozen depth representation → learned adaptation → frozen original waypoint predictor → GraphMap / planner.</p></div>
 </div>
 </section>
 
@@ -116,7 +118,7 @@ GraphMap can merge proposals with ghost nodes or absorb them into visited nodes.
 
 ### Mechanism checks before navigation claims
 
-Activation tracing and fixed feature-statistics alignment are static mechanism studies. Their conclusions are kept separate from navigation evaluation. Current learned-adaptation architecture details, training recipes, held-out protocols, and unpublished results are intentionally excluded from this public case study.
+Activation tracing and fixed feature-statistics alignment are static mechanism studies. Their conclusions are kept separate from navigation evaluation. Stage 5 remained an unfinished prototype: there was no completed formal training, held-out generalization acceptance, or demonstrated navigation recovery.
 </section>
 
 <section id="results" className="case-section case-section-wide">
@@ -127,6 +129,8 @@ Activation tracing and fixed feature-statistics alignment are static mechanism s
 All navigation rows below use the same fixed 20-episode `val_unseen` development panel. These numbers support rapid controlled comparisons, not official benchmark or held-out generalization claims.
 
 <ResultsTable />
+
+<EvidenceMedia asset={etpnavAssets.frozen} />
 
 ### What changed the next engineering decision
 
@@ -145,17 +149,17 @@ All navigation rows below use the same fixed 20-episode `val_unseen` development
 
 One audited configuration contained 595 raw candidates: 411 became new ghost nodes, 25 merged with existing ghosts, and 159 were absorbed into visited nodes. Very short-range candidates were particularly vulnerable to absorption. This is a configuration-specific audit, not a general distribution claim.
 
-<MediaPlaceholder asset={etpnavAssets.graph} />
+<EvidenceMedia asset={etpnavAssets.graph} />
 
 ### Predictor collapse occurs downstream
 
 Sparse inputs retained partial structure after the frozen depth encoder. Activation tracing located complete collapse later in the frozen waypoint predictor, leaving effectively bias-driven waypoint logits. The evidence points toward an interface/domain-shift problem rather than simply an empty encoder representation.
 
-<MediaPlaceholder asset={etpnavAssets.activation} />
+<EvidenceMedia asset={etpnavAssets.activation} />
 
 ### Simple statistics did not repair the interface
 
-Channel-wise mean/std alignment failed to restore classifier activity or waypoint diversity on held-out static observations. This negative mechanism result motivates learned adaptation; it does not establish that the ongoing method succeeds.
+Channel-wise mean/std alignment failed to restore classifier activity or waypoint diversity on held-out static observations. This negative mechanism result motivated an unfinished learned-adapter prototype, not a successful adaptation result.
 </section>
 
 <section id="limitations" className="case-section">
@@ -166,10 +170,10 @@ Channel-wise mean/std alignment failed to restore classifier activity or waypoin
 - The 20 development episodes are a small, repeatedly used comparison panel.
 - The sparse observation model approximates selected sensor properties, not a complete native MID360 simulation.
 - Static activation recovery, if achieved, would still require controlled navigation validation.
-- Current learned-adaptation results are not disclosed publicly.
-- Isaac Sim native LiDAR, localization, and real MID360 robot execution remain planned.
+- Stage 5 learned adapter was not completed; no formal held-out generalization or waypoint recovery was demonstrated.
+- Isaac Sim native LiDAR, localization, and real MID360 robot execution were not implemented in this concluded project.
 
-The intended transfer path is controlled Habitat validation → Isaac Sim native LiDAR → MID360 and IMU localization → real-robot integration. Each stage requires its own evidence.
+The earlier Isaac Sim / MID360 hardware transfer plan was discontinued; the project closed with controlled experiments and documented negative findings.
 </section>
 
 <section id="media" className="case-section">
@@ -177,9 +181,7 @@ The intended transfer path is controlled Habitat validation → Isaac Sim native
 
 ## Authentic evidence, when available.
 
-The three labeled figure slots above reserve space for actual observation comparisons, a GraphMap audit, and predictor activation traces. No simulator screenshots or experimental plots have been invented. A video demo is not currently supplied.
-
-Figures will be added after checking project provenance, public sharing permission, labels, and sensitive content. The structured diagram above is an explanatory redrawing of public documentation.
+Four traceable SVG figures are integrated from historical experiment records: episode-53 proposal output, aggregate GraphMap audit, five-static-observation activation summary, and Frozen-20 development comparisons. They are post-processing of recorded evidence, not new simulator runs or a real-model navigation demo. The architecture diagram above remains explanatory.
 </section>
 
 <section id="repository" className="case-section">
@@ -187,9 +189,9 @@ Figures will be added after checking project provenance, public sharing permissi
 
 ## Public scope and original work.
 
-The [ETPNav-MID360 showcase](https://github.com/sceneeeee/ETPNav-MID360-showcase) contains a publication-safe overview, public analysis material, and supporting documentation. It is separate from the private active research repository.
+The [ETPNav-MID360 project repository](https://github.com/sceneeeee/ETPNav-MID360) contains a publication-safe overview, public analysis material, and supporting documentation. The original research line is concluded and was not continued into hardware deployment.
 
-Implementation descriptions and results on this page follow the [public research overview](https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md), checked on 3 November 2026. Website preparation did not rerun the underlying experiments.
+Implementation descriptions and results on this page follow the [project closeout report](https://github.com/sceneeeee/ETPNav-MID360/blob/main/docs/project-closeout.md), checked on 16 November 2026. Website preparation did not rerun the underlying experiments.
 
 Upstream: **ETPNav: Evolving Topological Planning for Vision-Language Navigation in Continuous Environments**, Dong An et al., IEEE TPAMI, 2024. [Original repository](https://github.com/MarSaKi/ETPNav) · [Paper](https://arxiv.org/abs/2304.03047).
 </section>

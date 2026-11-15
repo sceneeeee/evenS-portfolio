@@ -3,34 +3,39 @@ locale: en
 slug: room-sign-navigation
 title: Room-Sign-Guided Navigation
 subtitle: Reasoning from observed room and sign evidence.
-evidence: Capture and reasoning exist as separate modules. The full search loop is not integrated.
-summary: An RGB-first research testbed combining room-label evidence, landmark memory, and rule or text-LLM decisions for human-in-the-loop search.
-order: 2
+evidence: M2.4 is merged into main; M3.2 recorded-video door advice is tested, but M3.3 live acceptance and complete room search remain unverified.
+summary: RGB-first human-in-the-loop indoor room search combining door-label perception, evidence-aware landmark memory, Rule/Qwen text planning, and bounded visual observation advice.
+order: 1
 caseStudyReady: false
-status: modules
-statusAsOf: '2026-11-03'
+status: research
+lifecycle: active
+validationLevel: offline-prototype
+statusAsOf: '2026-11-16'
 role: Member A — memory, reasoning & evaluation
-ownershipSummary: 'My work: M2.1–M2.4 memory, Rule/Qwen planning and offline evaluation. Member B: capture/OCR workflow and M1 perception. My integration and evaluation-design responsibilities do not imply a completed search loop.'
+ownershipSummary: 'My role: M2.1–M2.4 memory, Rule/Qwen strategies, offline evaluation, and integration/evaluation design. Member B owns M0 OCR capture and M1 perception. Offline integration is not field success.'
 environment: Standalone reasoning / replay; separate field capture
 tags: [Landmark memory, OCR evidence, Qwen3-4B]
 repository: https://github.com/sceneeeee/room-sign-guided-navigation
 contributions:
   - Implemented M2.1–M2.4, LandmarkMemory, Rule reasoning, Qwen3-4B text planning, and the offline evaluation framework.
-  - Owns M1/M2 integration and M3/M4 integration and evaluation design; full-loop completion is not claimed.
+  - Designed integration and evaluation; M1/M2.4 offline replay is now merged, with M3.3 live acceptance still pending.
 collaboratorWork:
   - Member B owns M0 camera capture and OCR field workflow.
   - Member B owns M1 perception and cross-frame association; M1 completion is not claimed.
 modules:
-  - name: M2.1–M2.4
-    status: implemented
-    context: Standalone feat/m2-reasoning branch, separate from the M0 capture workflow on main.
-  - name: M1/M2 integration and complete search loop
+  - name: M2.1–M2.4 and M1/M2.4 offline integration
+    status: validated
+    context: Merged into main via PR #4; replay of three manually associated observations, without live FOUND confirmation.
+  - name: M3.2 recorded-video door advice
+    status: validated
+    context: Bounded suggestions tested on recorded video; motion_authorized=false, forward guidance and target confirmation unverified.
+  - name: M3.3 live acceptance and full search loop
     status: planned
-    context: Integration responsibility is confirmed; implemented full-loop navigation is not claimed.
+    context: No accepted real-time multi-door closed loop or controlled search-success results.
 sources:
   - label: Public README
     url: https://github.com/sceneeeee/room-sign-guided-navigation/blob/main/README.md
-    checkedAt: '2026-11-03'
-    ref: main; reasoning described on feat/m2-reasoning
+    checkedAt: '2026-11-16'
+    ref: main
 ---
-Case study is reserved for Phase 3. The full search loop is not integrated.
+The only ongoing research project. Recorded-video M3.2 advice is not motion authorization; real-time M3.3 acceptance and complete room search remain pending.

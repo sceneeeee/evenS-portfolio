@@ -30,12 +30,12 @@ const projects = await localizedProjects(locale);
     </section>
     <section class="section-block practice-section" aria-labelledby="practice-title">
       <div class="section-heading"><div><p class="eyebrow">{t.practice}</p><h2 id="practice-title">{t.practiceTitle}</h2></div></div>
-      <div class="practice-grid">{t.practices.map(practice => <article><span class="practice-index">{practice.label}</span><h3>{practice.title}</h3><p>{practice.text}</p><a href={localePath(`/projects/etpnav-mid360/#${practice.anchor}`, locale)}>{practice.link} <span aria-hidden="true">↗</span></a></article>)}</div>
+      <div class="practice-grid">{t.practices.map(practice => <article><span class="practice-index">{practice.label}</span><h3>{practice.title}</h3><p>{practice.text}</p><a href={localePath(`/projects/navida-habitat/#${practice.anchor}`, locale)}>{practice.link} <span aria-hidden="true">↗</span></a></article>)}</div>
     </section>
     <section id="background" class="background-section section-block" aria-labelledby="background-title">
       <div><p class="eyebrow">{t.background}</p><h2 id="background-title">{t.backgroundTitle[0]}<br />{t.backgroundTitle[1]}</h2></div>
       <div>{t.backgroundText.map(text => <p>{text}</p>)}<div class="development-note"><span class="eyebrow">{t.development}</span><p>{t.developmentText}</p></div></div>
     </section>
-    <section class="closing-section" aria-labelledby="closing-title"><div><p class="eyebrow">{t.continue}</p><h2 id="closing-title">{t.closing}</h2></div><a class="button" href={localePath('/projects/etpnav-mid360/', locale)}>ETPNav × MID360 <span aria-hidden="true">↗</span></a></section>
+    <section class="closing-section" aria-labelledby="closing-title"><div><p class="eyebrow">{t.continue}</p><h2 id="closing-title">{t.closing}</h2></div><a class="button" href={localePath('/projects/', locale)}>{t.all} <span aria-hidden="true">↗</span></a></section>
   </div>
 </BaseLayout>

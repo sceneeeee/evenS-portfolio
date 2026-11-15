@@ -1,0 +1,15 @@
+---
+import type { ProjectAsset } from '../data/media';
+import { localizedAsset } from '../i18n/media';
+import { getLocale, type Locale } from '../i18n';
+interface Props { asset: ProjectAsset; locale?: Locale; compact?: boolean; }
+const { asset, locale = getLocale(Astro.url.pathname), compact = false } = Astro.props;
+const data = localizedAsset(asset, locale);
+if (!data.src || data.status !== 'INTEGRATED') throw new Error(`Unintegrated media: ${data.id}`);
+---
+<figure class:list={['media-figure', 'evidence-figure', { compact }]} data-asset-id={data.id}>
+  <a href={data.src} target="_blank" rel="noopener" aria-label={data.alt}>
+    <img src={data.src} alt={data.alt} width={data.width} height={data.height} loading={compact ? 'eager' : 'lazy'} decoding="async" />
+  </a>
+  {!compact && <figcaption>{data.caption} <a href={data.source} target="_blank" rel="noopener">[{locale === 'zh' ? '证据来源' : 'Evidence source'}]</a></figcaption>}
+</figure>

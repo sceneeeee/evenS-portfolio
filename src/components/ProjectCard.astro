@@ -1,19 +1,21 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import MediaPlaceholder from './MediaPlaceholder.astro';
-import { etpnavAssets } from '../data/media';
+import { etpnavAssets, navidaAssets } from '../data/media';
+import EvidenceMedia from './EvidenceMedia.astro';
 import { dictionaries, localePath } from '../i18n';
 interface Props { project: CollectionEntry<'projects'>; featured?: boolean; }
 const { project, featured = false } = Astro.props;
 const { data } = project;
 const locale = data.locale;
 const t = dictionaries[locale];
+const featuredAsset = data.slug === 'etpnav-mid360' ? etpnavAssets.proposals : data.slug === 'navida-habitat' ? navidaAssets.scene : null;
 ---
-<article class:list={['project-card', { 'project-featured': featured }]}>
-  {featured && <div class="featured-media"><MediaPlaceholder asset={etpnavAssets.observation} locale={locale} compact /></div>}
+<article class:list={['project-card', { 'project-featured': featured, 'feature-no-media': featured && !featuredAsset }]}>
+  {featuredAsset && <div class="featured-media"><EvidenceMedia asset={featuredAsset} locale={locale} compact /></div>}
   <div class="project-card-body">
-    <div class="card-topline"><span class="eyebrow">{t.card.project} / {String(data.order).padStart(2, '0')}</span><span class="status-badge">{t.status[data.status]}</span></div>
-    <h3>{data.title}</h3>
+    <div class="card-topline"><span class="eyebrow">{t.card.project} / {String(data.order).padStart(2, '0')}</span><span class="status-badge">{t.lifecycle[data.lifecycle]}</span></div>
+    <h3>{data.title}</h3><p class="card-ownership">{t.validationLevel[data.validationLevel]}</p>
     <p class="card-subtitle">{data.subtitle}</p>
     <p>{data.summary}</p>
     {data.ownershipSummary && <p class="card-ownership">{data.ownershipSummary}</p>}

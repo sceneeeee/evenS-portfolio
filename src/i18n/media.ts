@@ -3,22 +3,41 @@ import type { Locale } from './index';
 
 const zh: Record<string, Pick<ProjectAsset, 'description' | 'caption' | 'alt'>> = {
   'ETP-01': {
-    description: '同一视点的稠密深度与 MID360 类稀疏深度观测对照',
-    caption: '同一仿真视点下的一组配对观测。稀疏输入是用于受控实验的 MID360 类抽象，并非原生传感器采集。',
-    alt: '同一视点的稠密深度与模拟稀疏深度，采用一致的朝向和深度标尺。',
+    description: 'Episode 53 航点候选对比（并非深度图像）',
+    caption: '同一观测下，原始稠密深度产生 4 个航点候选，MID360 类稀疏零样本产生 5 个候选，半径均为 0.75 m。这是历史输出的后处理，并非原始传感器图。',
+    alt: '两张极坐标航点候选图：稠密深度 4 个候选；稀疏零样本 5 个候选全部位于 0.75 米半径。',
   },
   'ETP-02': {
-    description: 'GraphMap 关联前后的航点候选对照',
-    caption: '可公开的审计示例：展示哪些候选成为图上的可选动作、与已有幽灵节点合并，或被已访问节点吸收。需注明实际运行及配置标识。',
-    alt: '航点候选及其 GraphMap 关联结果，分别标记为新增幽灵节点、幽灵节点合并和已访问节点吸收。',
+    description: 'G-Min Frozen-20 GraphMap 聚合关联审计',
+    caption: '聚合统计：595 个候选中，411 个成为新增 ghost（绿）、25 个与已有 ghost 合并（黄）、159 个被已访问节点吸收（红）；不是单帧 GraphMap 截图。',
+    alt: 'GraphMap 聚合条形图，包含 411 个新增 ghost、25 个合并及 159 个已访问节点吸收，并按候选半径分组。',
   },
   'ETP-03': {
-    description: '冻结航点预测器中的稠密与稀疏输入激活追踪',
-    caption: '配对激活追踪：展示编码器中保留的部分结构与下游预测器的激活塌缩。需注明网络层、量程及观测背景。',
-    alt: '稠密与稀疏输入的配对激活图，展示深度编码器中保留的结构及下游分类器的激活塌缩。',
+    description: '五个静态观测的分类器激活率汇总',
+    caption: '五个独立留出静态观测：稠密输入分类器 post-ReLU 有激活 5/5；稀疏和对齐稀疏均为 0/5。这是活动率汇总，不是原始特征图或导航实验。',
+    alt: '五个静态观测的激活率汇总：稠密分类器仍有激活，稀疏与统计对齐后的稀疏分类器激活为零。',
+  },
+  'ETP-04': {
+    description: 'Frozen-20 开发集六种方案的对照图',
+    caption: '六种方法在同一组 20 个 val_unseen 开发回合上的受控比较，非正式 R2R-CE 基准或独立泛化成绩。',
+    alt: '六种 ETPNav 与几何方案在二十回合开发集上的多个导航指标对照图。',
+  },
+  'NAV-01': {
+    description: '真实 Habitat 0.3.3 场景 RGB 画面',
+    caption: 'skokloster-castle 测试场景真实 Habitat RGB 画面。关联工程演示使用确定性 Fake Policy，而非 NaVIDA 模型推理。',
+    alt: 'Habitat 仿真器在 skokloster-castle 测试场景中渲染的真实 RGB 图像。',
+  },
+  'NAV-02': {
+    description: '确定性演示的实际 pose 轨迹',
+    caption: '根据确定性 Fake Policy 演示记录的仿真 pose 绘制；不是规划轨迹或成功寻路轨迹。',
+    alt: '根据确定性 Fake Policy Habitat 演示中记录的世界坐标位姿得到的轨迹。',
+  },
+  'NAV-03': {
+    description: 'HTTP、动作队列与环境执行的数据流程',
+    caption: '系统说明示意图，不是运行时 UI 截图；图中计数与固定动作演示记录对应。',
+    alt: '连接本地 HTTP 服务、原子动作队列和真实 Habitat env.step 调用的系统架构示意图。',
   },
 };
-
 export function localizedAsset(asset: ProjectAsset, locale: Locale): ProjectAsset {
   if (locale === 'en') return asset;
   const translation = zh[asset.id];

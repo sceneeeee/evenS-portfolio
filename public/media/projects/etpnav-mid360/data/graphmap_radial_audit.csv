@@ -1,0 +1,8 @@
+distance_m,raw_candidates,visited_absorptions,ghost_merges,new_ghosts
+0.25,119,119,0,0
+0.75,119,7,1,111
+1.50,119,7,8,104
+2.00,2,0,0,2
+2.25,117,6,9,102
+2.75,2,0,0,2
+3.00,117,20,7,90

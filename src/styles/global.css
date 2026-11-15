@@ -298,3 +298,18 @@ td { font-family: var(--font-mono); font-size: .67rem; }
   .placeholder-center { padding: 0; }
   .placeholder-bottom { display: none; }
 }
+
+/* Phase 2 verified evidence media */
+.project-featured.feature-no-media { grid-template-columns: 1fr; }
+.project-card:not(.project-featured) .featured-media { border-right: 0; border-bottom: 1px solid var(--line); padding: 16px; }
+.evidence-figure { min-width: 0; }
+.evidence-figure a { display: block; min-width: 0; }
+.evidence-figure img { width: 100%; max-width: 100%; height: auto; object-fit: contain; display: block; background: #f8faf8; }
+.evidence-figure.compact img { max-height: 380px; }
+.evidence-video video { display: block; max-width: 100%; width: 100%; height: auto; background: #142520; }
+.evidence-figure figcaption a, .evidence-video figcaption a { display: inline; text-decoration: underline; }
+.case-section table { width: 100%; }
+@media (max-width: 767px) {
+  .evidence-figure img { max-height: none; }
+  .case-section table { display: block; max-width: 100%; overflow-x: auto; }
+}

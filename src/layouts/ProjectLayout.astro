@@ -13,10 +13,10 @@ const sections = sectionIds.map((id, i) => [id, t.case.sections[i]]);
   <div class="container">
     <header class="case-header">
       <a class="back-link" href={localePath('/projects/', locale)}>{t.case.back}</a>
-      <div class="case-title-row"><p class="eyebrow">{t.case.eyebrow}</p><span class="status-badge">{t.status[data.status]}</span></div>
-      <h1>{data.title}</h1><p class="case-subtitle">{data.subtitle}</p>
+      <div class="case-title-row"><p class="eyebrow">{t.case.eyebrow}</p><span class="status-badge">{t.lifecycle[data.lifecycle]}</span></div>
+      <p class="eyebrow">{t.validationLevel[data.validationLevel]}</p><h1>{data.title}</h1><p class="case-subtitle">{data.subtitle}</p>
       <p class="case-summary">{data.summary}</p>
-      <dl class="project-facts"><div><dt>{t.case.role}</dt><dd>{data.role}</dd></div><div><dt>{t.case.environment}</dt><dd>{data.environment}</dd></div><div><dt>{t.case.source}</dt><dd><a href={data.repository}>{t.case.showcase} ↗</a></dd></div></dl>
+      <dl class="project-facts"><div><dt>{t.case.role}</dt><dd>{data.role}</dd></div><div><dt>{t.case.environment}</dt><dd>{data.environment}</dd></div><div><dt>{t.case.source}</dt><dd><a href={data.repository}>{t.case.docs} ↗</a></dd></div></dl>
       <ul class="module-statuses" aria-label={t.case.moduleLabel}>{data.modules.map(module => <li><span class:list={['module-dot', module.status]} aria-hidden="true"></span><div><strong>{module.name}</strong><span>{t.moduleStatus[module.status]} · {module.context}</span></div></li>)}</ul>
     </header>
     <div class="case-layout">
