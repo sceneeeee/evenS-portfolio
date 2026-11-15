@@ -52,7 +52,7 @@ export const zh = {
   results: {
     label: '受控实验结果；小屏幕可横向滚动查看', captionBefore: '固定 20 个回合的 ', captionAfter: ' 开发对照集 · 用于受控比较，并非正式基准评测结果', method: '方法', baseline: '参考基线',
     methods: ['原始 ETPNav', '几何方案 V0', '几何方案 + 有界 NMS', 'MRU', 'G-Min', '稀疏深度零样本测试'],
-    explanation: 'SR：成功率；SPL：按路径长度加权的成功率；NE：导航误差；OS：理想停止条件下的成功率；nDTW：归一化动态时间规整；SDTW：成功加权的 DTW。箭头表示指标的优选方向。数值引自', source: '公开研究概述', afterSource: '；本网站制作过程中未重新运行这些实验。',
+    explanation: 'SR：成功率；SPL：按路径长度加权的成功率；NE：导航误差；OS：理想停止条件下的成功率；nDTW：归一化动态时间规整；SDTW：成功加权的 DTW。箭头表示指标的优选方向。数值引自', source: '项目结项报告', afterSource: '；本网站制作过程中未重新运行这些实验。',
   },
   notFound: { title: '页面未找到', description: '此页面暂不可用，请返回 evenS 的工程作品集。', eyebrow: '404 / 页面未找到', heading: '此地址没有对应页面。', text: '页面可能已移动，或尚未加入作品集。', home: '返回首页' },
 } satisfies Dictionary;

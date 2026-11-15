@@ -50,7 +50,7 @@ export const en = {
   results: {
     label: 'Controlled experiment results; scroll horizontally on small screens', captionBefore: 'Fixed 20-episode ', captionAfter: ' development panel · controlled comparisons, not official benchmark results', method: 'Method', baseline: 'Reference baseline',
     methods: ['Original ETPNav', 'Geometry V0', 'Geometry + bounded NMS', 'MRU', 'G-Min', 'Sparse depth zero-shot'],
-    explanation: 'SR: success rate; SPL: success weighted by path length; NE: navigation error; OS: oracle success; nDTW: normalized dynamic time warping; SDTW: success-weighted DTW. Arrows indicate the preferred direction. Values are reproduced from the ', source: 'public research overview', afterSource: '; experiments were not rerun for this website.',
+    explanation: 'SR: success rate; SPL: success weighted by path length; NE: navigation error; OS: oracle success; nDTW: normalized dynamic time warping; SDTW: success-weighted DTW. Arrows indicate the preferred direction. Values are reproduced from the ', source: 'project closeout report', afterSource: '; experiments were not rerun for this website.',
   },
   notFound: { title: 'Page not found', description: 'This page is not available. Return to evenS’s engineering portfolio.', eyebrow: '404 / PAGE NOT FOUND', heading: 'No page at this address.', text: 'The page may have moved or may not yet be part of the portfolio.', home: 'Return home' },
 };

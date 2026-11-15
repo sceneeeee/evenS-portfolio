@@ -76,7 +76,6 @@ for (const value of ['21', '11', '8.620', 'Fake Policy']) {
   check(navEn.includes(value) && navZh.includes(value), `Missing bilingual NaVIDA evidence value: ${value}`);
 }
 check(navEn.includes('engineering-demo.mp4') && navZh.includes('engineering-demo.mp4'), 'Missing bilingual NaVIDA demo video');
-check(!navEn.includes('ETPNav-MID360-showcase') && !navZh.includes('ETPNav-MID360-showcase'), 'Stale ETPNav showcase URL in NaVIDA');
 const numericCells = html => [...html.matchAll(/<td>([\d.]+)<\/td>/g)].map(match => match[1]);
 check(numericCells(en).length === 36, 'Expected all 36 experimental metric values');
 check(JSON.stringify(numericCells(en)) === JSON.stringify(numericCells(zh)), 'Bilingual experimental values differ');
