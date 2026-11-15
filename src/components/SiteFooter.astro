@@ -1,0 +1,14 @@
+---
+import { profile } from '../data/profile';
+import { dictionaries, getLocale, localePath, type Locale } from '../i18n';
+interface Props { locale?: Locale; }
+const { locale = getLocale(Astro.url.pathname) } = Astro.props;
+const t = dictionaries[locale].footer;
+---
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div><a class="wordmark" href={localePath('/', locale)}>even<span>S</span></a><p>{t.focus}</p></div>
+    <div class="footer-links"><a href={localePath('/projects/', locale)}>{t.explore} <span aria-hidden="true">↗</span></a><a href={profile.github}>GitHub <span aria-hidden="true">↗</span></a></div>
+    <p class="footer-note">{t.preview}<br />{t.pending}</p>
+  </div>
+</footer>

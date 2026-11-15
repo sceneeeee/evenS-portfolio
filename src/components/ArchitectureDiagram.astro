@@ -1,0 +1,11 @@
+---
+import { dictionaries, getLocale } from '../i18n';
+const t = dictionaries[getLocale(Astro.url.pathname)].diagram;
+---
+<figure class="architecture">
+  <div class="diagram-heading"><span class="eyebrow">{t.title}</span><span class="diagram-legend"><span class="legend-square"></span> {t.adaptation} <span class="legend-square frozen"></span> {t.upstream}</span></div>
+  <ol class="architecture-flow" aria-label={t.label}>
+    {t.nodes.map((node, i) => <li class:list={{'adaptation-node': i === 1}}><span class="node-number">{node.label}</span><strong>{node.title}</strong><span>{node.lines[0]}<br />{node.lines[1]}</span></li>)}
+  </ol>
+  <figcaption>{t.caption}</figcaption>
+</figure>

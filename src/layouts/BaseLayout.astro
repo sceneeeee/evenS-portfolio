@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { dictionaries, getLocale, localePath, languageTags, locales, type Locale } from '../i18n';
+interface Props { title: string; description: string; locale?: Locale; }
+const { title, description, locale = getLocale(Astro.url.pathname) } = Astro.props;
+const t = dictionaries[locale];
+// A local build uses Astro's development origin; SITE_URL supplies the real origin later.
+const origin = Astro.site ?? Astro.url.origin;
+const canonical = new URL(localePath(Astro.url.pathname, locale), origin);
+---
+<!doctype html>
+<html lang={languageTags[locale]}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#f7f8f5" />
+    <title>{title} | evenS</title>
+    <link rel="canonical" href={canonical} />
+    {locales.map(language => <link rel="alternate" hreflang={languageTags[language]} href={new URL(localePath(Astro.url.pathname, language), origin)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath(Astro.url.pathname, 'en'), origin)} />
+    <meta property="og:title" content={`${title} | evenS`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={t.siteName} />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta property="og:locale:alternate" content={locale === 'zh' ? 'en_US' : 'zh_CN'} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <SiteHeader locale={locale} />
+    <main id="main" tabindex="-1"><slot /></main>
+    <SiteFooter locale={locale} />
+  </body>
+</html>

@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import { dictionaries, localePath, sectionIds, formatDate } from '../i18n';
+interface Props { project: CollectionEntry<'projects'>; }
+const { project } = Astro.props;
+const { data } = project;
+const locale = data.locale;
+const t = dictionaries[locale];
+const sections = sectionIds.map((id, i) => [id, t.case.sections[i]]);
+---
+<BaseLayout title={data.title} description={data.summary} locale={locale}>
+  <div class="container">
+    <header class="case-header">
+      <a class="back-link" href={localePath('/projects/', locale)}>{t.case.back}</a>
+      <div class="case-title-row"><p class="eyebrow">{t.case.eyebrow}</p><span class="status-badge">{t.status[data.status]}</span></div>
+      <h1>{data.title}</h1><p class="case-subtitle">{data.subtitle}</p>
+      <p class="case-summary">{data.summary}</p>
+      <dl class="project-facts"><div><dt>{t.case.role}</dt><dd>{data.role}</dd></div><div><dt>{t.case.environment}</dt><dd>{data.environment}</dd></div><div><dt>{t.case.source}</dt><dd><a href={data.repository}>{t.case.showcase} ↗</a></dd></div></dl>
+      <ul class="module-statuses" aria-label={t.case.moduleLabel}>{data.modules.map(module => <li><span class:list={['module-dot', module.status]} aria-hidden="true"></span><div><strong>{module.name}</strong><span>{t.moduleStatus[module.status]} · {module.context}</span></div></li>)}</ul>
+    </header>
+    <div class="case-layout">
+      <aside class="case-sidebar"><nav aria-label={t.case.nav}><p class="eyebrow">{t.case.contents}</p><ol>{sections.map(([id, label], i) => <li><a href={`#${id}`}><span>{String(i + 1).padStart(2, '0')}</span>{label}</a></li>)}</ol></nav><p class="sidebar-source">{t.case.checked}<br /><time datetime={data.statusAsOf}>{formatDate(data.statusAsOf, locale)}</time></p></aside>
+      <div class="case-content"><slot /></div>
+    </div>
+    <div class="case-end"><p class="eyebrow">{t.case.continue}</p><a class="text-link" href={localePath('/projects/', locale)}>{t.case.all} <span aria-hidden="true">↗</span></a><a class="text-link" href={data.repository}>{t.case.docs} <span aria-hidden="true">↗</span></a></div>
+  </div>
+</BaseLayout>

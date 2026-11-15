@@ -1,0 +1,24 @@
+---
+import type { ProjectAsset } from '../data/media';
+import { localizedAsset } from '../i18n/media';
+import { dictionaries, getLocale, type Locale } from '../i18n';
+interface Props { asset: ProjectAsset; compact?: boolean; locale?: Locale; }
+const { compact = false, locale = getLocale(Astro.url.pathname) } = Astro.props;
+const asset = localizedAsset(Astro.props.asset, locale);
+const t = dictionaries[locale].media;
+const divisor = (a: number, b: number): number => b === 0 ? a : divisor(b, a % b);
+const factor = divisor(asset.width, asset.height);
+const ratio = `${asset.width / factor}:${asset.height / factor}`;
+---
+<figure class:list={['media-figure', { compact }]} data-asset-id={asset.id}>
+  <div class="media-placeholder" style={`aspect-ratio: ${asset.width} / ${asset.height}`}>
+    <div class="placeholder-top"><span class="eyebrow">{asset.id}</span><span class="media-state">{t.pending}</span></div>
+    <div class="placeholder-center">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M3 10V3h7M20 3h7v7M27 20v7h-7M10 27H3v-7M10 15h10M15 10v10" stroke="currentColor" stroke-width="1.5" /></svg>
+      <p>{asset.description}</p>
+      <span class="media-spec">{ratio} · {asset.width} × {asset.height} {t.pixels}</span>
+    </div>
+    <span class="placeholder-bottom">{t.note}</span>
+  </div>
+  {!compact && <figcaption>{asset.caption}</figcaption>}
+</figure>

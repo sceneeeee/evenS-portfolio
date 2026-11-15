@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { dictionaries, localePath, type Locale } from '../../i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = dictionaries[locale].notFound;
+---
+<BaseLayout title={t.title} description={t.description} locale={locale}>
+  <div class="container page-heading"><p class="eyebrow">{t.eyebrow}</p><h1>{t.heading}</h1><p>{t.text}</p><a class="button" href={localePath('/', locale)}>{t.home} <span aria-hidden="true">↗</span></a></div>
+</BaseLayout>

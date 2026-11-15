@@ -1,0 +1,195 @@
+---
+locale: en
+slug: etpnav-mid360
+title: ETPNav × MID360
+subtitle: Adapting a navigation interface to sparse geometry.
+evidence: Waypoint diversity must survive GraphMap association to become useful action diversity.
+summary: Controlled studies of sparse LiDAR-style observations, waypoint prediction, and their interaction with a frozen topological navigation stack.
+order: 1
+caseStudyReady: true
+status: research
+statusAsOf: '2026-11-03'
+role: Baseline reproduction, interface adaptation & failure analysis
+environment: Habitat / R2R-CE · simulated MID360-like sparsity
+tags: [Vision-and-language navigation, Sparse geometry, GraphMap, Controlled experiments]
+repository: https://github.com/sceneeeee/ETPNav-MID360-showcase
+contributions:
+  - Reproduced and instrumented the ETPNav / Habitat baseline.
+  - Built deterministic MID360-like sparse-depth abstractions for controlled simulation studies.
+  - Designed and evaluated explicit-geometry waypoint variants, including bounded NMS, MRU and G-Min.
+  - Audited proposal diversity after GraphMap association and traced frozen predictor activations.
+  - Tested feature-statistics alignment, preserved its negative result, and began learned feature adaptation.
+contributionNote: ETPNav, GraphMap, and the language-conditioned planner are upstream work. My contribution is the adaptation study, instrumentation, controlled comparisons, and failure analysis.
+collaboratorWork: []
+modules:
+  - name: Baseline and geometry studies
+    status: validated
+    context: Controlled simulation experiments on a fixed development panel.
+  - name: Learned feature adaptation
+    status: in-progress
+    context: Public system boundary only; current training details and results remain private.
+  - name: Isaac Sim and physical MID360 transfer
+    status: planned
+    context: No real-robot deployment is claimed.
+sources:
+  - label: Public showcase README
+    url: https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/README.md
+    checkedAt: '2026-11-03'
+    ref: main
+  - label: Detailed research overview
+    url: https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md
+    checkedAt: '2026-11-03'
+    ref: main
+---
+import ArchitectureDiagram from '../../../components/ArchitectureDiagram.astro';
+import ResultsTable from '../../../components/ResultsTable.astro';
+import MediaPlaceholder from '../../../components/MediaPlaceholder.astro';
+import { etpnavAssets } from '../../../data/media';
+
+<section id="overview" className="case-section">
+<span className="eyebrow">01 / OVERVIEW</span>
+
+## Preserve the navigation prior. Change the sensor interface.
+
+ETPNav uses learned waypoints from panoramic RGB-D observations to build a topological representation and follow language instructions. This project studies what happens when dense depth is replaced by sparse, MID360-like geometry.
+
+The experimental boundary is deliberately narrow: adapt the waypoint interface while keeping GraphMap and the downstream planner frozen wherever possible. This makes sensor sparsity, proposal semantics, and graph interaction easier to investigate separately.
+
+<div className="callout"><strong>Current scope</strong><p>Controlled Habitat studies and ongoing feature adaptation. Native LiDAR simulation and physical robot transfer are planned stages.</p></div>
+</section>
+
+<section id="problem" className="case-section">
+<span className="eyebrow">02 / PROBLEM & MOTIVATION</span>
+
+## Geometric feasibility is only part of the interface.
+
+Replacing a learned RGB-D front-end with geometry-based waypoints changes more than input density. Candidate distance, angular coverage, learned feature statistics, and graph association can all alter the decisions available to the planner.
+
+The engineering question is whether the original navigation prior can remain useful under sparse observations without redesigning the whole stack. Controlled ablations test one hypothesis at a time rather than changing perception, planning, and execution together.
+
+<MediaPlaceholder asset={etpnavAssets.observation} />
+</section>
+
+<section id="contributions" className="case-section">
+<span className="eyebrow">03 / MY CONTRIBUTIONS</span>
+
+## Build, instrument, compare, explain.
+
+- **Baseline and observations:** reproduced and instrumented the ETPNav / Habitat baseline; built deterministic sparse-depth abstractions.
+- **Proposal design:** designed and evaluated explicit-geometry variants, bounded NMS, middle-distance radial utility (MRU), and angular/radial coverage (G-Min).
+- **Interface audit:** followed candidates through GraphMap association to distinguish raw proposal diversity from available graph actions.
+- **Failure forensics:** traced intermediate network activations and tested fixed channel-statistics alignment.
+- **Research direction:** began learned sparse-to-dense feature adaptation, informed by the negative results.
+
+<div className="ownership-note"><strong>Upstream boundary</strong><p>The original ETPNav method, learned waypoint predictor, GraphMap, and language/topological planner belong to the upstream authors. This project builds on their work; it does not claim authorship of those modules.</p></div>
+</section>
+
+<section id="architecture" className="case-section case-section-wide">
+<span className="eyebrow">04 / SYSTEM ARCHITECTURE</span>
+
+## One interface, two experimental routes.
+
+<ArchitectureDiagram />
+
+<div className="two-up implementation-routes">
+<div><h3>Explicit geometry · tested</h3><p>12-view depth → metric point cloud → deterministic sparsification → traversability / geometry → waypoint candidates → frozen graph and planner.</p></div>
+<div><h3>Feature adaptation · ongoing</h3><p>Sparse geometry → frozen depth representation → learned adaptation → frozen original waypoint predictor → GraphMap / planner.</p></div>
+</div>
+</section>
+
+<section id="implementation" className="case-section">
+<span className="eyebrow">05 / TECHNICAL IMPLEMENTATION</span>
+
+## Design around the downstream contract.
+
+### Sparse input construction
+
+Dense depth is reconstructed into metric geometry, sparsified with a deterministic MID360-like angular abstraction, and projected using nearest returns. This is a controlled engineering abstraction; it does not reproduce the full Livox sampling process, motion distortion, or sensor noise.
+
+### Bounded proposal suppression
+
+The proposal map has circular angle and bounded distance dimensions. A geometry-specific non-maximum suppression correction respects that distinction. The original ETPNav NMS implementation remains unchanged.
+
+### Candidate association
+
+GraphMap can merge proposals with ghost nodes or absorb them into visited nodes. Local candidate diversity is therefore evaluated together with the graph actions that remain after association.
+
+### Mechanism checks before navigation claims
+
+Activation tracing and fixed feature-statistics alignment are static mechanism studies. Their conclusions are kept separate from navigation evaluation. Current learned-adaptation architecture details, training recipes, held-out protocols, and unpublished results are intentionally excluded from this public case study.
+</section>
+
+<section id="results" className="case-section case-section-wide">
+<span className="eyebrow">06 / EXPERIMENTS & RESULTS</span>
+
+## Controlled comparisons expose the gap.
+
+All navigation rows below use the same fixed 20-episode `val_unseen` development panel. These numbers support rapid controlled comparisons, not official benchmark or held-out generalization claims.
+
+<ResultsTable />
+
+### What changed the next engineering decision
+
+- **Bounded NMS improved the geometry variant**, but remained below the original baseline on this panel.
+- **MRU corrected the distance tendency without recovering navigation.** Matching the average proposal distance was insufficient.
+- **G-Min improved several path-quality measures**, while its success rate did not exceed bounded NMS.
+- **Sparse depth zero-shot collapsed.** This motivated tracing where the frozen predictor stopped responding usefully.
+</section>
+
+<section id="failure-analysis" className="case-section">
+<span className="eyebrow">07 / FAILURE ANALYSIS</span>
+
+## Follow the failure past the first representation.
+
+### Raw waypoints do not equal graph actions
+
+One audited configuration contained 595 raw candidates: 411 became new ghost nodes, 25 merged with existing ghosts, and 159 were absorbed into visited nodes. Very short-range candidates were particularly vulnerable to absorption. This is a configuration-specific audit, not a general distribution claim.
+
+<MediaPlaceholder asset={etpnavAssets.graph} />
+
+### Predictor collapse occurs downstream
+
+Sparse inputs retained partial structure after the frozen depth encoder. Activation tracing located complete collapse later in the frozen waypoint predictor, leaving effectively bias-driven waypoint logits. The evidence points toward an interface/domain-shift problem rather than simply an empty encoder representation.
+
+<MediaPlaceholder asset={etpnavAssets.activation} />
+
+### Simple statistics did not repair the interface
+
+Channel-wise mean/std alignment failed to restore classifier activity or waypoint diversity on held-out static observations. This negative mechanism result motivates learned adaptation; it does not establish that the ongoing method succeeds.
+</section>
+
+<section id="limitations" className="case-section">
+<span className="eyebrow">08 / LIMITATIONS & NEXT STEPS</span>
+
+## Keep the validation boundary explicit.
+
+- The 20 development episodes are a small, repeatedly used comparison panel.
+- The sparse observation model approximates selected sensor properties, not a complete native MID360 simulation.
+- Static activation recovery, if achieved, would still require controlled navigation validation.
+- Current learned-adaptation results are not disclosed publicly.
+- Isaac Sim native LiDAR, localization, and real MID360 robot execution remain planned.
+
+The intended transfer path is controlled Habitat validation → Isaac Sim native LiDAR → MID360 and IMU localization → real-robot integration. Each stage requires its own evidence.
+</section>
+
+<section id="media" className="case-section">
+<span className="eyebrow">09 / DEMO & MEDIA</span>
+
+## Authentic evidence, when available.
+
+The three labeled figure slots above reserve space for actual observation comparisons, a GraphMap audit, and predictor activation traces. No simulator screenshots or experimental plots have been invented. A video demo is not currently supplied.
+
+Figures will be added after checking project provenance, public sharing permission, labels, and sensitive content. The structured diagram above is an explanatory redrawing of public documentation.
+</section>
+
+<section id="repository" className="case-section">
+<span className="eyebrow">10 / REPOSITORY & ATTRIBUTION</span>
+
+## Public scope and original work.
+
+The [ETPNav-MID360 showcase](https://github.com/sceneeeee/ETPNav-MID360-showcase) contains a publication-safe overview, public analysis material, and supporting documentation. It is separate from the private active research repository.
+
+Implementation descriptions and results on this page follow the [public research overview](https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md), checked on 3 November 2026. Website preparation did not rerun the underlying experiments.
+
+Upstream: **ETPNav: Evolving Topological Planning for Vision-Language Navigation in Continuous Environments**, Dong An et al., IEEE TPAMI, 2024. [Original repository](https://github.com/MarSaKi/ETPNav) · [Paper](https://arxiv.org/abs/2304.03047).
+</section>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../ProjectCard.astro';
+import { localizedProjects } from '../../lib/projects';
+import { dictionaries, type Locale } from '../../i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = dictionaries[locale].projects;
+const projects = await localizedProjects(locale);
+---
+<BaseLayout title={t.title} description={t.description} locale={locale}>
+  <div class="container">
+    <header class="page-heading"><p class="eyebrow">{t.eyebrow}</p><h1>{t.heading[0]}<br /><span>{t.heading[1]}</span></h1><p>{t.intro}</p></header>
+    <section class="project-grid project-index" aria-label={t.label}>{projects.map((project, i) => <ProjectCard project={project} featured={i === 0} />)}</section>
+    <aside class="index-note"><span class="eyebrow">{t.statusTitle}</span><p>{t.statusText}</p></aside>
+  </div>
+</BaseLayout>

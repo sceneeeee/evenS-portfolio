@@ -1,0 +1,13 @@
+---
+import { dictionaries, getLocale } from '../i18n';
+import { etpnavResults } from '../data/etpnav-results';
+const t = dictionaries[getLocale(Astro.url.pathname)].results;
+---
+<div class="table-scroll" role="region" aria-label={t.label} tabindex="0">
+  <table>
+    <caption>{t.captionBefore}<code>val_unseen</code>{t.captionAfter}</caption>
+    <thead><tr><th scope="col">{t.method}</th><th scope="col">SR ↑</th><th scope="col">SPL ↑</th><th scope="col">NE ↓</th><th scope="col">OS ↑</th><th scope="col">nDTW ↑</th><th scope="col">SDTW ↑</th></tr></thead>
+    <tbody>{etpnavResults.map((values, index) => <tr class:list={{ 'baseline-row': index === 0 }}><th scope="row">{t.methods[index]}{index === 0 && <span class="baseline-label">{t.baseline}</span>}</th>{values.map(value => <td>{value}</td>)}</tr>)}</tbody>
+  </table>
+</div>
+<p class="table-note">{t.explanation}<a href="https://github.com/sceneeeee/ETPNav-MID360-showcase/blob/main/docs/RESEARCH_OVERVIEW.md">{t.source}</a>{t.afterSource}</p>

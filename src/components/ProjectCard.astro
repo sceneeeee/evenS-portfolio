@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import MediaPlaceholder from './MediaPlaceholder.astro';
+import { etpnavAssets } from '../data/media';
+import { dictionaries, localePath } from '../i18n';
+interface Props { project: CollectionEntry<'projects'>; featured?: boolean; }
+const { project, featured = false } = Astro.props;
+const { data } = project;
+const locale = data.locale;
+const t = dictionaries[locale];
+---
+<article class:list={['project-card', { 'project-featured': featured }]}>
+  {featured && <div class="featured-media"><MediaPlaceholder asset={etpnavAssets.observation} locale={locale} compact /></div>}
+  <div class="project-card-body">
+    <div class="card-topline"><span class="eyebrow">{t.card.project} / {String(data.order).padStart(2, '0')}</span><span class="status-badge">{t.status[data.status]}</span></div>
+    <h3>{data.title}</h3>
+    <p class="card-subtitle">{data.subtitle}</p>
+    <p>{data.summary}</p>
+    {data.ownershipSummary && <p class="card-ownership">{data.ownershipSummary}</p>}
+    <div class="card-evidence"><span class="eyebrow">{data.caseStudyReady ? t.card.finding : t.card.scope}</span><p>{data.evidence}</p></div>
+    <ul class="tags" aria-label={t.card.tags}>{data.tags.slice(0, 3).map(tag => <li>{tag}</li>)}</ul>
+    <div class="card-actions">{data.caseStudyReady ? <a class="text-link" href={localePath(`/projects/${data.slug}/`, locale)}>{t.card.read} <span aria-hidden="true">↗</span></a> : <span class="pending-label">{t.card.pending}</span>}<a href={data.repository} aria-label={`${data.title} ${t.card.repository}`}>GitHub <span aria-hidden="true">↗</span></a></div>
+  </div>
+</article>

@@ -1,0 +1,5 @@
+---
+import NotFoundPage from '../components/pages/NotFoundPage.astro';
+import { getLocale } from '../i18n';
+---
+<NotFoundPage locale={getLocale(Astro.url.pathname)} />

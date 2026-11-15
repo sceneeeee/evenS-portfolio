@@ -1,0 +1,8 @@
+temp_report.md
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+.qa/
